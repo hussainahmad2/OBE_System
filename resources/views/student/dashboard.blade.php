@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Student</title>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -16,10 +16,10 @@
     <style>
         /* Sidebar Styles */
         .sidebar {
-            height: auto;
+            height: 100vh;
             background: linear-gradient(to bottom, #3C9AA5, #23546B);
             color: white;
-            padding-top: 70px;
+            padding-top: 30px;
         }
         .sidebar a {
             color: white;
@@ -108,7 +108,10 @@
                 display: none;
         }
         .heading{
-            margin: 50px 50px 50px 0;
+            margin: 20px 0 20px 0;
+        }
+        .logo-heading {
+            margin-left: 30px;
         }
 
 
@@ -135,17 +138,18 @@
 
 <!-- Navbar -->
 <div class="container-fluid p-0">
-    <nav class="col-md-12 col-lg-12 navbar ">
-        <div class="container-fluid">
-            <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" >
-            <div class="icon-container">
-                <a href="admin_main.php">
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to bottom, #3C9AA5, #23546B);">
+        <div class="container-fluid d-flex align-items-center justify-content-center" style="gap: 20px;">
+            <img src="{{ asset('img/logo.jpeg') }}" alt="FUI Logo" class="logo img-fluid" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+            <span class="logo-heading text-center" style="font-size: 2rem; font-weight: bold; color: #fff; flex: 1;">Foundation University Rawalpindi</span>
+            <div class="icon-container" style="margin-left: auto;">
+                <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="https://fusst.fui.edu.pk/" title="Information">
+                <a href="https://fusst.fui.edu.pk/" title="Information" target="_blank">
                     <i class="fas fa-info-circle"></i>
                 </a>
-                <a href="#" title="fusst@fui.edu.pk" data-toggle="tooltip" data-placement="left">
+                <a href="https://fusst.fui.edu.pk/index.php/aboutus/about-campus/contact-us" title="Contact Us" target="_blank" data-toggle="tooltip" data-placement="left">
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
@@ -160,7 +164,6 @@
                 <a href="#" class="d-block pl-4 py-1">Result</a>
             </div>
 
-
             <form id="logout-form" action="{{ route('student.logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
@@ -171,120 +174,84 @@
         </div>
 
         <!-- Main Content Section -->
-        <div class="container">
+        <div class="col-md-9 col-lg-10">
             <h2 class="heading">Select Cources Registration</h2>
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
-        
-            <!-- Semester Selection -->
-            {{-- <div class="mb-3">
-                <label>Select Semester:</label>
-                @for ($i = 1; $i <= 8; $i++)
-                    <input type="checkbox" name="semester[]" value="{{ $i }}" class="semester-checkbox" 
-                           @if(in_array($i, [6,7,8])) checked @endif> {{ $i }}th Semester
-                @endfor
-            </div> --}}
-        
-            <!-- Course Registration Form -->
-            {{-- <div class="row"> --}}
-                <form class="col-12 col-md-12" action="{{ route('courses.register') }}" method="POST">
-                    @csrf
+            <form class="col-12 col-md-12" action="{{ route('courses.register') }}" method="POST">
+                @csrf
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course Name</th>
+                            <th>Teacher Name</th>
+                            <th>Class</th>
+                            <th>Register</th>
+                        </tr>
+                    </thead>
+                    <tbody id="course-list">
+                        @foreach ($courses as $index => $course)
+                            <tr data-semester="{{ $course->semester }}">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $course->course->name }} ({{ $course->course->code }})</td>
+                                <td>{{ $course->faculty->user->name }}</td>
+                                <td>
+                                    @if(empty($course->section))
+                                        -
+                                    @else
+                                        {{ $course->batch }} - {{ $course->section }}
+                                    @endif
+                                </td>
+                                <input type="hidden" name="teacher_ids[]" value="{{ $course->faculty->user_id }}">
+                                <input type="hidden" name="course_ids[]" value="{{ $course->course_id }}">
+                                <input type="hidden" name="course_allocation_ids[]" value="{{ $course->id }}">
+                                <input type="hidden" name="student_id" value="{{ $coreuser->id }}">
+                                <td>
+                                    <input type="checkbox" name="selected_courses[]" value="{{ $course->id }}" class="course-checkbox">
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <h2 class="heading text-center">Registered Courses Status</h2>
+
+                @if($courseRegistration->isNotEmpty()) 
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Course Name</th>
-                                <th>Teacher Name</th>
+                                <th>S#</th>
+                                <th>Course Title</th>
                                 <th>Class</th>
-                                <th>Register</th>
-                                
+                                <th>Faculty</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="course-list">
-                            @foreach ($courses as $index => $course)
-                                <tr data-semester="{{ $course->semester }}">
+                        <tbody>
+                            @foreach($courseRegistration as $index => $registration)
+                                <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $course->course->name }} ({{ $course->course->code }})</td>
-                                    <td>{{ $course->faculty->user->name }}</td>
-                                    <td>
-                                        @if(empty($course->section))
-                                            -
-                                        @else
-                                            {{ $course->batch }} - {{ $course->section }}
-                                        @endif
-                                    </td>
-                                    
-                                    <!-- Hidden input fields to store IDs -->
-                                    <input type="hidden" name="teacher_ids[]" value="{{ $course->faculty->user_id }}">
-                                    <input type="hidden" name="course_ids[]" value="{{ $course->course_id }}">
-                                    <input type="hidden" name="course_allocation_ids[]" value="{{ $course->id }}">
-                                    <input type="hidden" name="student_id" value="{{ $coreuser->id }}">
-                                    <td>
-                                        <input type="checkbox" name="selected_courses[]" value="{{ $course->id }}" class="course-checkbox">
-                                    </td>
+                                    <td>{{ $registration->course->name }} ({{ $registration->course->code }})</td>
+                                    <td>{{ $registration->courseAllocation->batch }} - {{ $registration->courseAllocation->section }}</td>
+                                    <td>{{ $registration->courseAllocation->faculty->user->name ?? 'N/A' }}</td>
+                                    <td>{{ ucfirst($registration->status) }}</td>
                                 </tr>
-                                {{-- <tr data-semester="{{ $course->semester }}">
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $course->course->name }} ({{ $course->course->code }})</td>
-                                    <td>{{ $course->faculty->user->name }}</td>
-                                    <td>{{ $course->batch }} - {{ $course->section }}</td>
-
-                                    <!-- Use course_allocation_id as the key for related data -->
-                                    <input type="hidden" name="course_data[{{ $course->id }}][teacher_id]" value="{{ $course->faculty->user_id }}">
-                                    <input type="hidden" name="course_data[{{ $course->id }}][course_id]" value="{{ $course->course_id }}">
-                                    <input type="hidden" name="course_data[{{ $course->id }}][allocation_id]" value="{{ $course->id }}">
-                                    <input type="hidden" name="student_id" value="{{ $coreuser->id }}">
-
-                                    <td>
-                                        <input type="checkbox" name="selected_courses[]" value="{{ $course->id }}" class="course-checkbox">
-                                    </td>
-                                </tr> --}}
                             @endforeach
                         </tbody>
                     </table>
-
-                    <h2 class="heading text-center">Registered Courses Status</h2>
-
-                    @if($courseRegistration->isNotEmpty()) 
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>S#</th>
-                                    <th>Course Title</th>
-                                    <th>Class</th>
-                                    <th>Faculty</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($courseRegistration as $index => $registration)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td> <!-- Serial Number -->
-                                        <td>{{ $registration->course->name }} ({{ $registration->course->code }})</td> <!-- Course Title -->
-                                        <td>{{ $registration->courseAllocation->batch }} - {{ $registration->courseAllocation->section }}</td> <!-- Class -->
-                                        <td>{{ $registration->courseAllocation->faculty->user->name ?? 'N/A' }}</td> <!-- Faculty Name -->
-                                        <td>{{ ucfirst($registration->status) }}</td> <!-- Status with First Letter Capitalized -->
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @else
-                        <p class="text-center">courses not registered yet.</p>
-                    @endif
-                
-                    <p><strong>Selected Courses:</strong> <span id="selected-courses">0</span></p>
-                
-                    <button type="submit" class="btn btn-primary">Register Selected Courses</button>
-                </form>
-                
+                @else
+                    <p class="text-center">courses not registered yet.</p>
+                @endif
+            
+                <p><strong>Selected Courses:</strong> <span id="selected-courses">0</span></p>
+            
+                <button type="submit" class="btn btn-primary">Register Selected Courses</button>
+            </form>
         </div>
-        
-        <!-- JavaScript to Handle Selection -->
-        
-        
     </div>
 </div>
 <script>

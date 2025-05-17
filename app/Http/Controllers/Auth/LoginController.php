@@ -13,6 +13,7 @@ use \App\Models\User;
 use \App\Models\Course;
 use \App\Models\CourseAllocation;
 use \App\Models\CourseRegistration;
+use Illuminate\Support\Facades\DB;
 
 
 class LoginController extends Controller
@@ -227,4 +228,27 @@ class LoginController extends Controller
     //     return redirect()->route('showAdminLoginForm'); // Redirect to login page
     // }
     
+    public function showQecLoginForm()
+    {
+        return view('auth.qec_login');
+    }
+
+    public function qecLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = \App\Models\User::where('email', $request->email)
+            ->where('role_id', 4) // Only QEC users
+            ->first();
+
+        if ($user && \Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+            return redirect()->to('/Qualityenhancementcell/dashboard');
+        } else {
+            return back()->with('error', 'Invalid QEC credentials');
+        }
+    }
 }

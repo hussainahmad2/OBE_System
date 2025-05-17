@@ -1,3 +1,4 @@
+@section('title', 'Admin Dashboard')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,10 +137,11 @@
 
 <!-- Navbar -->
 <div class="container-fluid p-0">
-    <nav class="col-md-12 col-lg-12 navbar ">
-        <div class="container-fluid">
-            <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" >
-            <div class="icon-container">
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to bottom, #3C9AA5, #23546B);">
+        <div class="container-fluid d-flex align-items-center justify-content-center" style="gap: 20px;">
+            <img src="{{ asset('img/logo.jpeg') }}" alt="FUI Logo" class="logo img-fluid" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+            <span class="logo-heading text-center" style="font-size: 2rem; font-weight: bold; color: #fff; flex: 1;">Foundation University Rawalpindi</span>
+            <div class="icon-container" style="margin-left: auto;">
                 <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                     <i class="fas fa-home"></i>
                 </a>

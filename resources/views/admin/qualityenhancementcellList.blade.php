@@ -1,3 +1,4 @@
+@section('title', 'QEC List')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,10 +168,11 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" >
-        <div class="icon-container">
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(to bottom, #3C9AA5, #23546B);">
+    <div class="container-fluid d-flex align-items-center justify-content-center" style="gap: 20px;">
+        <img src="{{ asset('img/logo.jpeg') }}" alt="FUI Logo" class="logo img-fluid" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+        <span class="logo-heading text-center" style="font-size: 2rem; font-weight: bold; color: #fff; flex: 1;">Foundation University Rawalpindi</span>
+        <div class="icon-container" style="margin-left: auto;">
             <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                 <i class="fas fa-home"></i>
             </a>
@@ -203,8 +205,8 @@
 
             <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#qecMenu">QEC Management</button>
             <div id="qecMenu" class="collapse">
-                 <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">QEC List</a>
-                <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">Add QEC</a>
+                 <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">QEC List</a>
+                <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">Add QEC</a>
             </div>
 
 
@@ -218,15 +220,19 @@
         </div>
 
         <!-- Main Content Section -->
-        <div class="col-md-9 col-lg-10 mt-4">
+        <div class="col-md-9 col-lg-10 mt-4 px-4">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="search d-flex justify-content-between">
                 <h2 class="textnone">QEC List</h2>
-                <form method="GET" action="{{ route('student.list') }}" class="search-container">
-                    <input type="text" name="search" placeholder="Search QEC..." value="{{ request('search') }}" />
-                    <button type="submit" style="background-color: #23546B; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                <form method="GET" action="{{ route('QualityEnhancementCell.list') }}" class="search-container" onsubmit="return false;">
+                    <input type="text" id="qec-search" name="search" placeholder="Search QEC..." value="{{ request('search') }}" autocomplete="off" />
+                    <button type="button" style="background-color: #23546B; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
                         <i class="fas fa-search"></i>
                     </button>
-                    
                 </form>
             </div>
             <div class="table-responsive">
@@ -264,6 +270,24 @@
     // Initialize Bootstrap tooltips
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('qec-search');
+        const table = document.querySelector('.faculty-table tbody');
+        searchInput.addEventListener('input', function() {
+            const filter = searchInput.value.toLowerCase();
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const name = row.children[0].textContent.toLowerCase();
+                const email = row.children[1].textContent.toLowerCase();
+                if (name.includes(filter) || email.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
     });
 </script>
 

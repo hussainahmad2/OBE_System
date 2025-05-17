@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Faculty Login</title>
+    <title>Student Login</title>
     <style>
         body {
             height: 100vh;
@@ -176,10 +176,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
-                
-                <div class="mt-3 text-center">
-                    <a href="#" class="text-muted">Forgot your User ID or Password?</a>
-                </div>
             </div>
         </div>
     </div>

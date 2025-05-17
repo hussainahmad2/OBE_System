@@ -1,9 +1,10 @@
+@section('title', 'Faculty List')
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>faculty List</title>
+    <title>Faculty List</title>
     
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
     <!-- Bootstrap CSS -->
@@ -63,9 +64,8 @@
             background: linear-gradient(to bottom, #23546B, #3C9AA5);
         }
         .logo {
-            max-width: 120px !important;
-            min-width: 100px;
-            height: auto;
+            max-width: 300px;
+            
         }
         .logo-text {
             font-size: 2rem;
@@ -176,12 +176,11 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <div class="header-logo-container d-flex align-items-center" style="gap: 20px;">
-            <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" style="max-width: 120px; min-width: 100px;">
-        </div>
-        <div class="icon-container">
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(to bottom, #3C9AA5, #23546B);">
+    <div class="container-fluid d-flex align-items-center justify-content-center" style="gap: 20px;">
+        <img src="{{ asset('img/logo.jpeg') }}" alt="FUI Logo" class="logo img-fluid" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+        <span class="logo-heading text-center" style="font-size: 2rem; font-weight: bold; color: #fff; flex: 1;">Foundation University Rawalpindi</span>
+        <div class="icon-container" style="margin-left: auto;">
             <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                 <i class="fas fa-home"></i>
             </a>
@@ -214,8 +213,8 @@
 
             <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#qecMenu">QEC Management</button>
             <div id="qecMenu" class="collapse">
-                 <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">QEC List</a>
-                <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">Add QEC</a>
+                 <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">QEC List</a>
+                <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">Add QEC</a>
             </div>
 
 
@@ -230,16 +229,14 @@
 
         <!-- Main Content Section -->
         <div class="col-md-9 col-lg-10 mt-4">
-            <div class="search d-flex justify-content-between">
-                <h2 class="textnone">Faculty List</h2>
-                <form method="GET" action="{{ route('faculty.list') }}" class="search-container">
+            <div class="d-flex justify-content-between align-items-center mb-3" style="gap: 20px;">
+                <h2 class="mb-0" style="font-weight: 600; color: #2c3e50;">Faculty List</h2>
+                <form method="GET" action="{{ route('faculty.list') }}" class="search-container" style="max-width: 350px; width: 100%; margin-left: auto;">
                     <input type="text" id="facultySearch" name="search" placeholder="Search faculty..." value="{{ request('search') }}" autocomplete="off" />
                     <button type="submit" style="background-color: #23546B; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
                         <i class="fas fa-search"></i>
                     </button>
-                    
                 </form>
-                
             </div>
             @if (session('error'))
                 <div class="alert alert-danger">

@@ -1,9 +1,10 @@
+@section('title', 'Add Faculty')
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add faculty</title>
+    <title>Add Faculty</title>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -148,10 +149,11 @@
 
 <!-- Navbar -->
 <div class="container-fluid p-0">
-    <nav class="col-md-12 col-lg-12 navbar ">
-        <div class="container-fluid">
-            <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" >
-            <div class="icon-container">
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to bottom, #3C9AA5, #23546B);">
+        <div class="container-fluid d-flex align-items-center justify-content-center" style="gap: 20px;">
+            <img src="{{ asset('img/logo.jpeg') }}" alt="FUI Logo" class="logo img-fluid" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+            <span class="logo-heading text-center" style="font-size: 2rem; font-weight: bold; color: #fff; flex: 1;">Foundation University Rawalpindi</span>
+            <div class="icon-container" style="margin-left: auto;">
                 <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                     <i class="fas fa-home"></i>
                 </a>
@@ -184,7 +186,7 @@
             <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#qecMenu">QEC Management</button>
             <div id="qecMenu" class="collapse">
                 <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">QEC List</a>
-                 <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">Add QEC</a>
+                <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">Add QEC</a>
             </div>
 
 
@@ -223,7 +225,8 @@
                 
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password">
+                            <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password" minlength="8" maxlength="32" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':\">
+                            <div id="password-strength" style="font-weight:bold; display:none;"></div>
                             <p class="text-danger" id="passwordError" style="text-align: left;"></p>
                             <p class="text-danger" style="text-align: left;">{{ $errors->first('password') }}</p>
                         </div>
@@ -255,10 +258,10 @@
                     <div class="mb-4">
                         <label class="block font-bold">Additional Duties</label>
                         @foreach($dutyRoles as $duty)
-                            <label class="inline-block mr-4">
-                                <input type="checkbox" name="duties[]" value="{{ $duty->id }}">
-                                {{ $duty->name }}
-                            </label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="duties[]" value="{{ $duty->id }}" id="duty{{ $duty->id }}">
+                                <label class="form-check-label" for="duty{{ $duty->id }}">{{ $duty->name }}</label>
+                            </div>
                         @endforeach
                     </div>
                     <input type="submit" value="Submit"> 
@@ -372,6 +375,33 @@
             if (!valid) {
                 e.preventDefault();
             }
+        });
+
+        const passwordInput = document.getElementById('password');
+        const strengthDiv = document.getElementById('password-strength');
+        passwordInput.addEventListener('input', function() {
+            const val = passwordInput.value;
+            if (!val) {
+                strengthDiv.style.display = 'none';
+                strengthDiv.textContent = '';
+                return;
+            }
+            let strength = '';
+            let color = '';
+            if (val.length < 8) {
+                strength = 'Weak'; color = 'red';
+            } else if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':\",.<>/?]{8,}$/.test(val)) {
+                if (val.length >= 12 && /[!@#$%^&*()_+\-=\[\]{};':\",.<>/?]/.test(val)) {
+                    strength = 'Excellent'; color = 'green';
+                } else {
+                    strength = 'Strong'; color = 'orange';
+                }
+            } else {
+                strength = 'Weak'; color = 'red';
+            }
+            strengthDiv.textContent = strength;
+            strengthDiv.style.color = color;
+            strengthDiv.style.display = 'block';
         });
     });
 </script>

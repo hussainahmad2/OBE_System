@@ -42,4 +42,14 @@ class LogoutController extends Controller
 
         return redirect()->route('showStudentLoginForm'); // Redirect to login page
     }
+
+    public function qecLogout(Request $request)
+    {
+        Auth::logout(); // Logs out the user
+
+        $request->session()->invalidate(); // Invalidate session
+        $request->session()->regenerateToken(); // Regenerate CSRF token
+
+        return redirect()->route('qec.login.form'); // Redirect to QEC login page
+    }
 }

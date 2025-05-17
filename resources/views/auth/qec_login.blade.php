@@ -1,9 +1,12 @@
-@include('layouts.head')
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Home</title>
-
+    <title>QEC Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             height: 100vh;
@@ -57,12 +60,41 @@
             justify-content: center;
             flex: 1;
             width: 50%;
+            position: relative;
         }
-        .form-check {
-            margin-bottom: 15px;
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #e3edf7;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
         }
-        .form-check-input {
-            margin-right: 10px;
+        .back-arrow i {
+            font-size: 20px;
+            color: #23546B;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-login {
+            background-color: #035f73;
+            color: white;
+            width: 100%;
+        }
+        .btn-login:hover {
+            background-color: #033649;
+        }
+        .forgot-link {
+            display: block;
+            margin-top: 15px;
+            text-align: left;
         }
         @media (max-width: 768px) {
             .login-container {
@@ -75,6 +107,10 @@
                 padding: 2px;
                 width: 100%;
             }
+            .back-arrow {
+                top: 10px;
+                left: 10px;
+            }
         }
     </style>
 </head>
@@ -86,33 +122,24 @@
                 <img src="{{ asset('img/FUSSTLogo.jpg') }}" alt="University Logo">
             </div>
             <div class="col-md-6 right-panel">
-                <h2 class="mb-4 text-center">Login</h2>
-                <form>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" id="admin" onclick="redirectTo('/admin/login')">
-                        <label class="form-check-label" for="admin">Admin</label>
+                <a href="{{ url('/') }}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+                <h2 class="mb-4 text-center">QEC Login</h2>
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+                <form method="POST" action="{{ route('qec.login') }}">
+                    @csrf
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Email" required autofocus>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" id="faculty" onclick="redirectTo('/faculty/login')">
-                        <label class="form-check-label" for="faculty">Faculty</label>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" id="student" onclick="redirectTo('/login')">
-                        <label class="form-check-label" for="student">Student</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" id="qec" onclick="redirectTo('/qec/login')">
-                        <label class="form-check-label" for="qec">QEC</label>
-                    </div>
+                    <button type="submit" class="btn btn-login">Login</button>
                 </form>
-                <script>
-                    function redirectTo(url) {
-                        window.location.href = url;
-                    }
-                </script>
+                {{-- <a href="#" class="forgot-link">Forgot your User ID or Password?</a> --}}
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 

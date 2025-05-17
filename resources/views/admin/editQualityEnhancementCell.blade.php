@@ -1,9 +1,10 @@
+@section('title', 'Edit QEC')
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>edit faculty</title>
+    <title>Edit QEC</title>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -198,26 +199,31 @@
 
         <!-- Main Content Section -->
         <div class="col-md-9 col-lg-10 d-flex justify-content-center align-items-start main-div">
-                <form method="POST" action="{{ route('update.QualityEnhancementCell', $QualityEnhancementCell->id) }}">
-                    @csrf
-                    @method('POST')
-                    
-                <h2 class="text-center">Edit Quality Enhancement Cell</h2>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" name="name" value="{{ old('name', $QualityEnhancementCell->name) }}" required>
-                            <p class="text-danger">{{ $errors->first('name') }}</p>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value="{{ old('email', $QualityEnhancementCell->email) }}" required>
-                            <p class="text-danger">{{ $errors->first('email') }}</p>
-                        </div>
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <form method="POST" action="{{ route('update.QualityEnhancementCell', $QualityEnhancementCell->id) }}">
+                @csrf
+                @method('POST')
+                
+            <h2 class="text-center">Edit Quality Enhancement Cell</h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" value="{{ old('name', $QualityEnhancementCell->name) }}" required>
+                        <p class="text-danger">{{ $errors->first('name') }}</p>
                     </div>
-            
-                    <input type="submit" value="Update">
-                </form>
+                    <div class="col-md-12">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="{{ old('email', $QualityEnhancementCell->email) }}" required>
+                        <p class="text-danger">{{ $errors->first('email') }}</p>
+                    </div>
+                </div>
+        
+                <input type="submit" value="Update">
+            </form>
         </div>
     </div>
 </div>

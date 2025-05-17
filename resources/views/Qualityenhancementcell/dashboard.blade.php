@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>QEC</title>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/FUSSTLogo.jpg') }}">
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -136,13 +136,13 @@
         <div class="container-fluid">
             <img src="{{ asset('img/logo_wn.png') }}" alt="FUI Logo" class="logo img-fluid" >
             <div class="icon-container">
-                <a href="admin_main.php">
+                <a href="https://fusst.fui.edu.pk/" title="Home" target="_blank">
                     <i class="fas fa-home"></i>
                 </a>
-                <a href="https://fusst.fui.edu.pk/" title="Information">
+                <a href="https://fusst.fui.edu.pk/" title="Information" target="_blank">
                     <i class="fas fa-info-circle"></i>
                 </a>
-                <a href="#" title="fusst@fui.edu.pk" data-toggle="tooltip" data-placement="left">
+                <a href="mailto:fusst@fui.edu.pk" title="Contact Us">
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
@@ -152,27 +152,12 @@
     <div class="row m-0" >
         <!-- Sidebar Section -->
         <div class="col-md-3 col-lg-2 sidebar">
-            <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#facultyMenu">Faculty Management</button>
-            <div id="facultyMenu" class="collapse">
-                <a href="{{ route('faculty.list') }}" class="d-block pl-4 py-1">Faculty List</a>
-                <a href="{{ route('add.faculty') }}" class="d-block pl-4 py-1">Add Faculty</a>
-            </div>
-
-            <!-- Student Management Section -->
-            <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#studentMenu">Student Management</button>
-            <div id="studentMenu" class="collapse">
-                <a href="{{ route('student.list') }}" class="d-block pl-4 py-1">Student List</a>
-                <a href="{{ route('add.student') }}" class="d-block pl-4 py-1">Add Student</a>
-            </div>
-
-            <button class="btn btn-sidebar font-weight-bold" data-toggle="collapse" style="color: white" data-target="#qecMenu">QEC Management</button>
-            <div id="qecMenu" class="collapse">
-                 <a href="{{ route('add.QualityEnhancementCell') }}" class="d-block pl-4 py-1">QEC List</a>
-                <a href="{{ route('QualityEnhancementCell.list') }}" class="d-block pl-4 py-1">Add QEC</a>
-            </div>
-
-
-            <button class="btn btn-sidebar font-weight-bold" style="color: white">Sign out</button>
+            <form id="logout-form" action="{{ route('qec.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            <button class="btn btn-sidebar font-weight-bold" style="color: white" onclick="document.getElementById('logout-form').submit();">
+                Sign out
+            </button>
         </div>
 
         <!-- Main Content Section -->

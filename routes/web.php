@@ -16,7 +16,6 @@ use App\Http\Controllers\Student\CourseRegistrationController;
 
 use App\Http\Controllers\ExportController;
 
-
 // Route::get('/', function () {
 //         return view('welcome');
 //     })->name('home');
@@ -165,3 +164,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 // Route::middleware(['auth', 'student'])->group(function () {
 //     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
 // });
+
+Route::get('/qec/login', [LoginController::class, 'showQecLoginForm'])->name('qec.login.form');
+Route::post('/qec/login', [LoginController::class, 'qecLogin'])->name('qec.login');
+Route::post('/qec/logout', [LogoutController::class, 'qecLogout'])->name('qec.logout');
